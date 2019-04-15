@@ -1,0 +1,25 @@
+version: '3.0'
+
+services:
+  webserver:
+    image: nginx:1.15-alpine
+    container_name: nginx_demo
+    restart: always
+    networks:
+      - traefik
+    environment:
+      - TZ=Asia/Hong_Kong
+    volumes:
+      - ./data/conf.d:/etc/nginx/conf.d
+      - ./data/log:/var/log/nginx
+      - ./data/html:/usr/share/nginx/html
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:nginx.localhost.com
+      - traefik.basic.port=80
+      - traefik.basic.protocol=http
+
+networks:
+  traefik:
+    external: true
